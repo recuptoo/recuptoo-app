@@ -1,0 +1,3 @@
+rootProject.name = 'RecuptooApp'
+
+include ':app'
