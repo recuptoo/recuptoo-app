@@ -9,23 +9,52 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator,
+  TouchableOpacity,
 } from 'react-native';
+
+const CameraPage = require('./src/page/CameraPage');
+const MapPage = require('./src/page/MapPage');
 
 export default class RecuptooApp extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+      <Navigator
+        initialRoute={{id: 'MapPage', name: 'Map'}}
+        renderScene={this.renderScene.bind(this)}
+        configureScene={(route) => {
+          if (route.sceneConfig) {
+            return route.sceneConfig;
+          }
+          return Navigator.SceneConfigs.FloatFromRight;
+        }} />
+    );
+  }
+
+  renderScene(route, navigator) {
+    var routeId = route.id;
+    if (routeId === 'CameraPage') {
+      return (
+        <CameraPage navigator={navigator} {...route.passProps} />
+      );
+    }
+    if (routeId === 'MapPage') {
+      return (
+        <MapPage navigator={navigator} {...route.passProps} />
+      );
+    }
+
+    return this.noRoute(navigator);
+  }
+
+  noRoute(navigator) {
+    return (
+      <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center'}}>
+        <TouchableOpacity style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+            onPress={() => navigator.pop()}>
+          <Text style={{color: 'red', fontWeight: 'bold'}}>NOT FOUND</Text>
+        </TouchableOpacity>
       </View>
     );
   }
