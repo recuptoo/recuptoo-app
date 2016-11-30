@@ -8,30 +8,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
+  Image
 } from 'react-native';
-import Camera from 'react-native-camera';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
-class CameraPage extends Component {
-  state = {
-  }
-  takePicture(navigator) {
-    setTimeout(() => {
-      this.camera.capture()
-        .then((data) => {
-          console.log(data);
-          navigator.parentNavigator.push({
-            id: 'CropImagePage',
-            name: 'CropImage',
-            sceneConfig: Navigator.SceneConfigs.PushFromRight,
-            passProps: {
-              image: data.path
-            }
-          });
-        })
-        .catch(err => console.error(err));
-    }, 200);
-  }
+class CropImagePage extends Component {
   render() {
     return (
       <Navigator
@@ -46,17 +26,11 @@ class CameraPage extends Component {
   renderScene(route, navigator) {
     return (
       <View style={styles.container}>
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
-          style={styles.preview}
-          captureTarget={Camera.constants.CaptureTarget.disk}
-          aspect={Camera.constants.Aspect.fill}>
-          <TouchableOpacity style={styles.cameraButton} onPress={this.takePicture.bind(this, navigator)}>
-            <Icon name="camera" size={30} color="#16a085" />
-          </TouchableOpacity>
-        </Camera>
+        <Text>CROP</Text>
+        <Image
+          style={{width: 50, height: 50}}
+          source={{uri: this.props.image}}
+        />
       </View>
     );
   }
@@ -65,6 +39,7 @@ class CameraPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 64,
   },
   preview: {
     flex: 1,
@@ -73,17 +48,13 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
   },
-  cameraButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+  capture: {
+    flex: 0,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    borderStyle: 'solid',
-    borderWidth: 4,
-    borderColor: '#16a085'
+    borderRadius: 5,
+    color: '#000',
+    padding: 10,
+    margin: 40
   }
 });
 
@@ -112,4 +83,4 @@ var NavigationBarRouteMapper = {
   }
 };
 
-module.exports = CameraPage;
+module.exports = CropImagePage;
