@@ -14,23 +14,37 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 class CameraPage extends Component {
   state = {
+    coordinates: null
   }
   takePicture(navigator) {
     setTimeout(() => {
       this.camera.capture()
         .then((data) => {
-          console.log(data);
           navigator.parentNavigator.push({
             id: 'CropImagePage',
             name: 'CropImage',
             sceneConfig: Navigator.SceneConfigs.PushFromRight,
             passProps: {
-              image: data.path
+              image: data.path,
+              coordinates: this.state.coordinates,
             }
           });
         })
         .catch(err => console.error(err));
     }, 200);
+  }
+  componentWillMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({coordinates: position.coords});
+      },
+      error => console.log('ERROR : getCurrentPosition', error),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000
+      }
+    );
   }
   render() {
     return (
@@ -44,6 +58,12 @@ class CameraPage extends Component {
     );
   }
   renderScene(route, navigator) {
+    let cameraButtonStyle = [styles.cameraButton];
+    let cameraIconColor = '#16a085';
+    if (!this.state.coordinates) {
+      cameraButtonStyle.push(styles.cameraButtonDisabled);
+      cameraIconColor = '#ccc';
+    }
     return (
       <View style={styles.container}>
         <Camera
@@ -53,8 +73,8 @@ class CameraPage extends Component {
           style={styles.preview}
           captureTarget={Camera.constants.CaptureTarget.disk}
           aspect={Camera.constants.Aspect.fill}>
-          <TouchableOpacity style={styles.cameraButton} onPress={this.takePicture.bind(this, navigator)}>
-            <Icon name="camera" size={30} color="#16a085" />
+          <TouchableOpacity style={cameraButtonStyle} onPress={this.takePicture.bind(this, navigator)}>
+            <Icon name="camera" size={30} color={cameraIconColor} />
           </TouchableOpacity>
         </Camera>
       </View>
@@ -84,6 +104,10 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 4,
     borderColor: '#16a085'
+  },
+  cameraButtonDisabled: {
+    borderColor: '#ccc',
+    backgroundColor: 'rgba(256, 256, 256, 0.4)',
   }
 });
 

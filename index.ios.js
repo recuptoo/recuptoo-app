@@ -18,6 +18,7 @@ const CameraPage = require('./src/page/CameraPage');
 const MapPage = require('./src/page/MapPage');
 const SearchSettingsPage = require('./src/page/SearchSettingsPage');
 const CropImagePage = require('./src/page/CropImagePage');
+const FormPage = require('./src/page/FormPage');
 
 export default class RecuptooApp extends Component {
   render() {
@@ -54,6 +55,11 @@ export default class RecuptooApp extends Component {
     if (routeId === 'CropImagePage') {
       return (
         <CropImagePage navigator={navigator} {...route.passProps} />
+      );
+    }
+    if (routeId === 'FormPage') {
+      return (
+        <FormPage navigator={navigator} {...route.passProps} />
       );
     }
 

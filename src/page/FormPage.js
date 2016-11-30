@@ -8,14 +8,20 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
-  Image
+  Image,
+  TextInput,
 } from 'react-native';
 import {ImageCrop} from 'react-native-image-cropper';
 
-const { width, height } = Dimensions.get('window');
-const imageSize = (width - 20);
+const API = require('../API');
 
-class CropImagePage extends Component {
+const { width, height } = Dimensions.get('window');
+const imageSize = ((width / 2) - 20);
+
+class FormPage extends Component {
+  state = {
+    description: ''
+  };
   render() {
     return (
       <Navigator
@@ -30,33 +36,32 @@ class CropImagePage extends Component {
   renderScene(route, navigator) {
     return (
       <View style={styles.container}>
-        <View style={{flex: 1, alignItems: 'center', padding: 10}}>
-          <ImageCrop
-            ref={ref => { this.cropper = ref; }}
-            image={this.props.image}
-            cropHeight={imageSize}
-            cropWidth={imageSize}
-            zoom={0}
-            maxZoom={80}
-            minZoom={20}
-            panToMove={true}
-            pinchToZoom={true} />
+        <View style={{padding: 10}}>
+          <Image
+            style={{width: imageSize, height: imageSize, resizeMode: Image.resizeMode.contain}}
+            source={{uri: this.props.image}} />
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Description</Text>
+            <TextInput
+              style={{height: 40}}
+              onChangeText={(description) => this.setState({description})}
+              value={this.state.description}
+              placeholder={'Armoire, chaise, table basse…'} />
+          </View>
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {
-            this.cropper.crop().then((base64) => {
-              navigator.parentNavigator.push({
-                id: 'FormPage',
-                name: 'Form',
-                sceneConfig: Navigator.SceneConfigs.PushFromRight,
-                passProps: {
-                  image: base64,
-                  coordinates: this.props.coordinates,
-                }
-              });
-            })
+            let data = {
+              category: '/api/categories/1',
+              description: this.state.description,
+              coordinates: this.props.coordinates,
+            }
+            console.log('Creating object with data', data);
+            API.createObject(data, this.props.image).then((object) => {
+              console.log('Object created!', object);
+            });
           }}>
-            <Text style={{color: '#fff'}}>Continuer</Text>
+            <Text style={{color: '#fff'}}>Envoyer</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -78,6 +83,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  formGroup: {
+    paddingVertical: 10,
+  },
+  formLabel: {
+    fontWeight: 'bold',
+    marginBottom: 10
+  }
 });
 
 var NavigationBarRouteMapper = {
@@ -105,4 +117,4 @@ var NavigationBarRouteMapper = {
   }
 };
 
-module.exports = CropImagePage;
+module.exports = FormPage;
