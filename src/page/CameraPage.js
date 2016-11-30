@@ -49,11 +49,6 @@ class CameraPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // flexDirection: 'column',
-    // justifyContent: 'space-between',
-    // alignItems: 'stretch',
-    // // backgroundColor: '#F5FCFF',
-    // paddingTop: 64,
   },
   preview: {
     flex: 1,

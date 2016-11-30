@@ -13,14 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
 
-// import Polyline from 'polyline';
-// import _ from 'underscore';
-
-// const DirectionsAPI = require('../DirectionsAPI');
-// const OrdersAPI = require('../OrdersAPI');
-// const ResourcesAPI = require('../ResourcesAPI');
-// const Auth = require('../Auth');
-// const AppConfig = require('../AppConfig');
+const API = require('../API');
 
 const { width, height } = Dimensions.get('window');
 
@@ -41,18 +34,77 @@ class MapPage extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      polylineCoords: [],
       markers: [],
       position: undefined,
       loading: false,
-      loadingMessage: 'Connexion au serveur…',
+      loadingMessage: 'Chargement…',
     };
   }
-  _onRegionChange(region) {
+  get navigationBarRouteMapper() {
+    let onSearchClick = () => this.searchObjects();
+
+    return {
+      LeftButton(route, navigator, index, navState) {
+        return (
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+              onPress={() => {}}>
+            <Text style={{color: 'white', margin: 10}}>Retour</Text>
+          </TouchableOpacity>
+        );
+      },
+      RightButton(route, navigator, index, navState) {
+        return (
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center', paddingRight: 10}}
+            onPress={() => {
+              navigator.parentNavigator.push({
+                id: 'SearchSettingsPage',
+                name: 'SearchSettings',
+                sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
+                passProps: {
+                  onSearchClick: onSearchClick
+                }
+              });
+            }}>
+            <Icon name="search" size={20} color="#fff" />
+          </TouchableOpacity>
+        );
+      },
+      Title(route, navigator, index, navState) {
+        return (
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+            <Text style={{color: 'white', margin: 10, fontSize: 16}}>
+              Coursiers
+            </Text>
+          </TouchableOpacity>
+        );
+      }
+    };
+  }
+  onRegionChange(region) {
     this.setState({region});
   }
+  searchObjects() {
+    this.setState({loading: true});
+    API.getObjects().then((objects) => {
+      let markers = [];
+      objects.forEach((object) => {
+        markers.push({
+          key: 'object#' + object.id,
+          identifier: 'object#' + object.id,
+          coordinate: object.coordinates,
+          pinColor: 'green',
+          title: 'Foo',
+          description: object.description,
+        });
+      });
+      this.setState({
+        loading: false,
+        markers: markers
+      });
+    });
+  }
   componentDidMount() {
-    // this.setState({loading: true});
+    this.searchObjects();
   }
   render() {
     return (
@@ -61,7 +113,7 @@ class MapPage extends Component {
           navigator={this.props.navigator}
           navigationBar={
             <Navigator.NavigationBar style={styles.navigationBar}
-                routeMapper={NavigationBarRouteMapper} />
+                routeMapper={this.navigationBarRouteMapper} />
           } />
     );
   }
@@ -90,7 +142,7 @@ class MapPage extends Component {
             style={styles.map}
             initialRegion={this.state.region}
             region={this.state.region}
-            onRegionChange={this._onRegionChange.bind(this)}
+            onRegionChange={this.onRegionChange.bind(this)}
             zoomEnabled
             showsUserLocation
             loadingEnabled
@@ -118,7 +170,9 @@ class MapPage extends Component {
               id: 'CameraPage',
               name: 'Camera',
               sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
-              passProps: {}
+              passProps: {
+
+              }
             });
           }}>
             <Icon name="camera" size={30} color="#fff" />
@@ -129,33 +183,6 @@ class MapPage extends Component {
     );
   }
 }
-
-var NavigationBarRouteMapper = {
-  LeftButton(route, navigator, index, navState) {
-    return (
-      <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
-          onPress={() => {}}>
-        <Text style={{color: 'white', margin: 10}}>Retour</Text>
-      </TouchableOpacity>
-    );
-  },
-  RightButton(route, navigator, index, navState) {
-    return (
-      <TouchableOpacity style={{flex: 1, justifyContent: 'center', paddingRight: 10}}>
-        <Icon name="search" size={20} color="#fff" />
-      </TouchableOpacity>
-    );
-  },
-  Title(route, navigator, index, navState) {
-    return (
-      <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
-        <Text style={{color: 'white', margin: 10, fontSize: 16}}>
-          Coursiers
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-};
 
 const styles = StyleSheet.create({
   container: {

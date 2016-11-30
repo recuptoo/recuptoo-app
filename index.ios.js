@@ -16,6 +16,7 @@ import {
 
 const CameraPage = require('./src/page/CameraPage');
 const MapPage = require('./src/page/MapPage');
+const SearchSettingsPage = require('./src/page/SearchSettingsPage');
 
 export default class RecuptooApp extends Component {
   render() {
@@ -42,6 +43,11 @@ export default class RecuptooApp extends Component {
     if (routeId === 'MapPage') {
       return (
         <MapPage navigator={navigator} {...route.passProps} />
+      );
+    }
+    if (routeId === 'SearchSettingsPage') {
+      return (
+        <SearchSettingsPage navigator={navigator} {...route.passProps} />
       );
     }
 
