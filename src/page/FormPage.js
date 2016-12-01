@@ -20,7 +20,9 @@ const imageSize = ((width / 2) - 20);
 
 class FormPage extends Component {
   state = {
-    description: ''
+    description: '',
+    error: false,
+    errorMessage: '',
   };
   render() {
     return (
@@ -34,12 +36,23 @@ class FormPage extends Component {
     );
   }
   renderScene(route, navigator) {
+
+    let alert = <View />
+    if (this.state.error) {
+      alert = (
+        <View style={styles.alert}>
+          <Text style={styles.alertText}>{this.state.errorMessage}</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <View style={{padding: 10}}>
           <Image
             style={{width: imageSize, height: imageSize, resizeMode: Image.resizeMode.contain}}
             source={{uri: this.props.image}} />
+          {alert}
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Description</Text>
             <TextInput
@@ -51,17 +64,35 @@ class FormPage extends Component {
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {
+            this.setState({
+              error: false,
+              errorMessage: '',
+            });
+
             let data = {
               category: '/api/categories/1',
               description: this.state.description,
               coordinates: this.props.coordinates,
               image: this.props.image,
             }
-            console.log('Creating object with data', data);
-            API.createObject(data, this.props.image).then((object) => {
-              console.log('Object created!', object);
-              navigator.parentNavigator.resetTo({id: 'MapPage', name: 'Map'})
-            });
+            API.createObject(data, this.props.image)
+              .then((object) => {
+                console.log('Object created!', object);
+                navigator.parentNavigator.resetTo({id: 'MapPage', name: 'Map'})
+              })
+              .catch((error) => {
+                if (error['@type'] && error['@type'] === 'ConstraintViolationList') {
+                  this.setState({
+                    error: true,
+                    errorMessage: 'Veuillez compléter le formulaire',
+                  });
+                } else {
+                  this.setState({
+                    error: true,
+                    errorMessage: "Une erreur s'est produite",
+                  });
+                }
+              });
           }}>
             <Text style={{color: '#fff'}}>Envoyer</Text>
           </TouchableOpacity>
@@ -91,6 +122,18 @@ const styles = StyleSheet.create({
   formLabel: {
     fontWeight: 'bold',
     marginBottom: 10
+  },
+  alert: {
+    marginTop: 10,
+    backgroundColor: '#e74c3c',
+    padding: 5,
+    borderColor: '#c0392b',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  alertText: {
+    color: '#fff'
   }
 });
 

@@ -23,13 +23,15 @@ class API {
       headers: headers,
     });
 
-    return fetch(request)
-      .then((response) => {
-        return response.json();
-      })
-      .catch((err) => {
-        console.log('ERROR', err);
-      });
+    return new Promise((resolve, reject) => {
+      fetch(request)
+        .then((response) => {
+          return response.json().then(json => response.ok ? resolve(json) : reject(json));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 }
 
