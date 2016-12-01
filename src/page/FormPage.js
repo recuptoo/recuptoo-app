@@ -14,16 +14,21 @@ import {
 import {ImageCrop} from 'react-native-image-cropper';
 
 const API = require('../API');
+const CategoryPicker = require('../component/CategoryPicker');
 
 const { width, height } = Dimensions.get('window');
 const imageSize = ((width / 2) - 20);
 
 class FormPage extends Component {
   state = {
+    categories: [],
     description: '',
     error: false,
     errorMessage: '',
   };
+  componentWillMount() {
+    API.getCategories().then(categories => this.setState({categories}));
+  }
   render() {
     return (
       <Navigator
@@ -61,6 +66,13 @@ class FormPage extends Component {
               value={this.state.description}
               placeholder={'Armoire, chaise, table basse…'} />
           </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Catégorie</Text>
+            <CategoryPicker
+              ref={ref => { this.categoryPicker = ref; }}
+              multiple={false}
+              categories={this.state.categories} />
+          </View>
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {
@@ -69,8 +81,17 @@ class FormPage extends Component {
               errorMessage: '',
             });
 
+            let categories = this.categoryPicker.getCategories();
+            if (categories.length === 0) {
+              this.setState({
+                error: true,
+                errorMessage: 'Veuillez sélectionner une catégorie',
+              });
+              return;
+            }
+
             let data = {
-              category: '/api/categories/1',
+              category: '/api/categories/' + categories[0],
               description: this.state.description,
               coordinates: this.props.coordinates,
               image: this.props.image,
