@@ -11,6 +11,7 @@
     "gl-react-native": "^2.38.0",
     "react": "15.4.1",
     "react-native": "0.38.0",
+    "react-native-cache-store": "^1.0.2",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-image-cropper": "git+https://github.com/stoffern/react-native-image-cropper.git",
     "react-native-maps": "^0.11.0",
