@@ -55,6 +55,7 @@ class FormPage extends Component {
               category: '/api/categories/1',
               description: this.state.description,
               coordinates: this.props.coordinates,
+              image: this.props.image,
             }
             console.log('Creating object with data', data);
             API.createObject(data, this.props.image).then((object) => {
