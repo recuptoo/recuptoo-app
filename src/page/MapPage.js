@@ -101,6 +101,7 @@ class MapPage extends Component {
         loading: false,
         markers: markers
       });
+      this.map.fitToElements(false);
     });
   }
   componentDidMount() {
