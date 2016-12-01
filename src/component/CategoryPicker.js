@@ -14,11 +14,12 @@ class CategoryPicker extends Component {
   static defaultProps = {
     multiple: true,
     categories: [],
+    selectedCategories: [],
   };
   constructor(props) {
     super(props);
     this.state = {
-      selectedCategories: [],
+      selectedCategories: props.selectedCategories || [],
     };
   }
   getCategories() {
