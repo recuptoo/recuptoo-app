@@ -60,6 +60,7 @@ class FormPage extends Component {
             console.log('Creating object with data', data);
             API.createObject(data, this.props.image).then((object) => {
               console.log('Object created!', object);
+              navigator.parentNavigator.resetTo({id: 'MapPage', name: 'Map'})
             });
           }}>
             <Text style={{color: '#fff'}}>Envoyer</Text>
