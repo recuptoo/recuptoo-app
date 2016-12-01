@@ -37,6 +37,7 @@
 		C72D5953C28241D6B4E92A7C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 037A5359B7CE41B291450915 /* Octicons.ttf */; };
 		CE57694BECEA45158BA8F1F4 /* libRNGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD88045023344F8AA67602C /* libRNGL.a */; };
 		FA75A7B71DEE3626009E6FD8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA75A7B41DEE35D2009E6FD8 /* libRCTAnimation.a */; };
+		FAFEE8401DF01E7800547542 /* Paris.gpx in Resources */ = {isa = PBXBuildFile; fileRef = FAFEE83F1DF01E7800547542 /* Paris.gpx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,6 +251,7 @@
 		EB325921867747A4BFEFCB66 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		F179655C93F94E45ADD85714 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		FA75A7AE1DEE35D2009E6FD8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "/Users/alex/Workspace/recuptoo-app/node_modules/react-native/React/../Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<absolute>"; };
+		FAFEE83F1DF01E7800547542 /* Paris.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Paris.gpx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -445,6 +447,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FAFEE83F1DF01E7800547542 /* Paris.gpx */,
 				13B07FAE1A68108700A75B9A /* RecuptooApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RecuptooAppTests */,
@@ -829,6 +832,7 @@
 				348E3BD401024E948BD75D46 /* Ionicons.ttf in Resources */,
 				B42F808E05DE4A5C8C4F0DEA /* MaterialIcons.ttf in Resources */,
 				C72D5953C28241D6B4E92A7C /* Octicons.ttf in Resources */,
+				FAFEE8401DF01E7800547542 /* Paris.gpx in Resources */,
 				9EE05A04A1DA4F23A5A9AAFB /* SimpleLineIcons.ttf in Resources */,
 				7B26EB6E01654A45BF648A90 /* Zocial.ttf in Resources */,
 			);
